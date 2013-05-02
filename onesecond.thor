@@ -24,7 +24,7 @@ class Onesecond < Thor
 
 			Dir::mkdir file[:folder] unless Dir::exists? file[:folder]
 
-			options = {custom: "-ss #{start_time} -t 00:00:01"}
+			options = {custom: "-ss #{start_time} -t 00:00:01 -c copy"}
 
 			File::unlink file[:path] if File::exists? file[:path]
 			movie.transcode(file[:path], options)
