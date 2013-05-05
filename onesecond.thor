@@ -12,6 +12,11 @@ class Onesecond < Thor
 	method_option :cut_from_end, :type => :numeric, :default => -1, :aliases => "c", :desc => "cut N seconds from end. Overrides the one_second_everyday_mode parameter."
 	def split(file_name)
 		movie = load_movie(file_name)
+		if movie.nil?
+			say "movie #{file_name} not found or invalid."
+			return
+		end
+
 		date = Date.parse(options[:start_date])
 		i = 0
 
