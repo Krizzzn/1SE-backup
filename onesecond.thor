@@ -22,7 +22,7 @@ class Onesecond < Thor
 
 		dur = duration(movie)
 
-		until i >= dur - 1 
+		until i >= dur 
 			file = make_path(date)
 			tm = {:sec => i % 60, :min => i / 60}
 			start_time = "00:%02d:%02d" % [tm[:min], tm[:sec]]
