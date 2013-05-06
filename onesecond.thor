@@ -5,11 +5,11 @@ require 'thor'
 class Onesecond < Thor
 	ONE_SECOND_APP_MODE_SUFFIX = 5
 
-	method_option :one_second_everyday_mode, :type => :boolean, :default => true, :aliases => "e", :desc => "cuts the last #{ONE_SECOND_APP_MODE_SUFFIX} seconds from the input video before splitting it into chunks."
 
 	desc 'split FILE_NAME', "Split the FILE_NAME video into 1 second chunks."
 	method_option :start_date, :type => :string, :required => true, :aliases => "s", :desc => "the first day in the video. Format: 2013-01-01"
 	method_option :cut_from_end, :type => :numeric, :default => -1, :aliases => "c", :desc => "cut N seconds from end before the split. Overrides the one_second_everyday_mode parameter."
+	method_option :one_second_everyday_mode, :type => :boolean, :default => true, :aliases => "e", :desc => "cuts the last #{ONE_SECOND_APP_MODE_SUFFIX} seconds from the input video before splitting it into chunks."
 	def split(file_name)
 		movie = load_movie(file_name)
 		if movie.nil?
@@ -24,7 +24,8 @@ class Onesecond < Thor
 
 	desc "auto_split (FILE_NAME)", "Splits the seconds from FILE_NAME (leave empty to auto-discover the file with the latest creation date). Reads the last date of previous splits."
 	method_option :cut_from_end, :type => :numeric, :default => -1, :aliases => "c", :desc => "cut N seconds from end. Overrides the one_second_everyday_mode parameter."
-	def auto_split(file_name)
+	method_option :one_second_everyday_mode, :type => :boolean, :default => true, :aliases => "e", :desc => "cuts the last #{ONE_SECOND_APP_MODE_SUFFIX} seconds from the input video before splitting it into chunks."
+	def auto_split(file_name = nil)
 		file_name = Dir["*.mov"].to_a.sort_by{|file_name| File::mtime file_name }.last if file_name.nil?
 		if file_name.nil?
 			say "file_name was not auto discovered. Place a .mov file into the root folder."
