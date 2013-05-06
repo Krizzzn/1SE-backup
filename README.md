@@ -19,12 +19,12 @@ The output movies from the 1SE app have to be placed inside the script directory
 ### Split
 `>thor onesecond:split FILE_NAME --start-date 2013-01-01`  
 splits the FILE_NAME into 1 second chunks and places them into a directory structure (i.e. `/201301 January/2013-01-01.mov`). The `--start-date` parameter should be set to the first second's date. This is required to assign correct file names to the chunks.  
-The split command ignores the last 5 seconds that normally show the 1SE logo. This can be overridden with the `--cut-from-end` parameter or by turning of the `--one-second-everyday-mode`.
+The split command ignores the last 5 seconds that normally show the 1SE logo. This can be overridden with the `--cut-from-end` parameter or by turning off the `--one-second-everyday-mode`.
 
 ### Autosplit
 `>thor onesecond:auto_split`  
-Auto-splitting searches for the .mov with the latest modified date and splits it into one second chunks. As date the Action uses the last created video chunk.  
-Auto split requires that the split action ran at least once, and the directory structure is not modified.  
+Auto-splitting searches for the .mov with the latest modified date and splits it into one second long chunks. This action uses the last created video chunk as date.  
+Auto split requires that the split action ran at least once, and an unmodified directory structure.  
 This action also uses the `--cut-from-end` and `--one-second-everyday-mode` parameters.
 
 `>thor onesecond:auto_split FILE_NAME`  
