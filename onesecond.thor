@@ -22,9 +22,14 @@ class Onesecond < Thor
 		split_movie start_date
 	end
 
-	desc "auto_split FILE_NAME", "Splits the seconds from FILE_NAME. Reads the last date of previous splits."
+	desc "auto_split (FILE_NAME)", "Splits the seconds from FILE_NAME (leave empty to auto-discover the file with the latest creation date). Reads the last date of previous splits."
 	method_option :cut_from_end, :type => :numeric, :default => -1, :aliases => "c", :desc => "cut N seconds from end. Overrides the one_second_everyday_mode parameter."
 	def auto_split(file_name)
+		file_name = Dir["*.mov"].to_a.sort_by{|file_name| File::mtime file_name }.last if file_name.nil?
+		if file_name.nil?
+			say "file_name was not auto discovered. Place a .mov file into the root folder."
+		end 
+
 		movies = find_all_movies 
 		movie = load_movie(file_name)
 		
@@ -81,14 +86,10 @@ class Onesecond < Thor
 		merge_files movies_for_merge
 	end
 
-	desc "add_new_movie FILE_NAME", "Split FILE_NAME (leave empty to auto-discover the file with the latest creation date) and merge the latest movies."
+	desc "process (FILE_NAME)", "Split FILE_NAME (leave empty to auto-discover the file with the latest creation date) and merge the latest movies."
 	method_option :output_file, :type => :string, :default => "one_second_everyday.mov" , :alias => "o", :desc => "file name of the merged video."
 	method_option :max_months, :type => :numeric, :default => 12, :alias => "m", :desc => "Months from the latest chunk for the merge."
-	def add_new_movie(file_name = nil)
-		file_name = Dir["*.mov"].to_a.sort_by{|file_name| File::mtime file_name }.last if file_name.nil?
-		if file_name.nil?
-			say "file_name was not auto discovered. Place a .mov file into the root folder."
-		end
+	def process(file_name = nil)
 		invoke :auto_split, [filename]
 		invoke :merge_all
 	end
